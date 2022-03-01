@@ -59,8 +59,8 @@ public class MinseweperGame extends JPanel
         {
             for(int j = 0; j < NUMCOLS; j++)
             {
-                grid[row][col].setValue(getNumber(row, col));
-                grid[row][col].setText("" + grid[row][col].getValue());
+                grid[i][j].setValue(getNumber(i, j));
+                grid[i][j].setText("" + grid[i][j].getValue());
             }
         }
         
@@ -115,127 +115,24 @@ public class MinseweperGame extends JPanel
     public int getNumber(int r, int c)
     {
         int count = 0; 
+        if(grid[r][c].getValue() == -1)
+        {
+            return -1;
+        }
+        for(int i = r-1; i<=r+1; i++)
+        {
+            for (int j = c-1; j<=c+1; j++)
+            {
+                if(i >= 0 && i < NUMROWS - 1 && j >= 0 && j <= NUMCOLS-1 && i != r && j != c)
+                {
+                    if (grid[i][j].getValue()==-1)
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
 
-        if (r>0 && c>0 && r<NUMROWS-1 && c<NUMCOLS-1)//if it is in the middle of the grid
-        {
-            for(int i = r-1; i<=r+1; i++)
-            {
-                for (int j = c-1; j<=c+1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        
-        else if(r==0 && c==0)//check the top left corner
-        {
-            for (int i = 0; i<=r+1; i++)
-            {
-                for (int j = 0; j<=c+1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if(r==NUMROWS-1 && c==0)//check the bottom left corner
-        {
-            for (int i = NUMROWS-2; i<=NUMROWS-1; i++)
-            {
-                for (int j = 0; j<=c+1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if(r==0 && c==NUMCOLS-1)//check the top right corner
-        {
-            for (int i = 0; i<=r+1; i++)
-            {
-                for (int j = NUMCOLS-2; j<=NUMCOLS-1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if(r==NUMROWS-1 && c==NUMCOLS-1)//check the top left corner
-        {
-            for (int i = NUMROWS-2; i<=NUMROWS-1; i++)
-            {
-                for (int j = NUMCOLS-2; j<=NUMCOLS-1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if(r==0)//top edge
-        {
-            for (int i = 0; i<=1; i++)
-            {
-                for (int j = c-1; j<= c+1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if(r==NUMROWS-1)//bottom edge
-        {
-            for (int i = NUMROWS-2; i<=NUMROWS-1; i++)
-            {
-                for (int j = c-1; j<= c+1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if (c==0)//left side edge
-        {
-            for (int i = r-1; i<=r+1; i++)
-            {
-                for (int j =0; j<=1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        else if (c== NUMCOLS-1)
-        {
-            for (int i = r-1; i<=r+1; i++)
-            {
-                for (int j = NUMCOLS-2; j<=NUMCOLS-1; j++)
-                {
-                    if (grid[i][j].getValue()==-1)
-                    {
-                        count++;
-                    }
-                }
-            }
-            
-        }
-        
         return count;
     }
 
