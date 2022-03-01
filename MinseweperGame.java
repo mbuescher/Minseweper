@@ -45,6 +45,18 @@ public class MinseweperGame extends JPanel
             add(grid[row][col]);  
           }
         }
+        int bombsNotPlaced = NUMBOMBS;
+        while(bombsNotPlaced > 0)
+        {
+            int row = (int) (Math.random() * NUMROWS);
+            int col = (int) (Math.random() * NUMCOLS);
+            if(grid[row][col].getValue() == 0)
+            {
+                grid[row][col].setValue(-1);
+                grid[row][col].setText("" + grid[row][col].getValue());
+                bombsNotPlaced--;
+            }
+        }
         
     }    
 
