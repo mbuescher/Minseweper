@@ -38,15 +38,15 @@ public class MinseweperGame extends JPanel
         {
           for (int col = 0; col < NUMCOLS; col++)
           { 
-            grid[row][col] = new MinsewepButton(row, col);  
+            grid[row][col] = new MinsewepButton(row, col); 
+            grid[row][col].setValue(getNumber(row, col));
+            grid[row][col].setText("" + grid[row][col].getValue());
             grid[row][col].addMouseListener(new ButtonListenerLeftRightClick());
             add(grid[row][col]);  
           }
         }
         
     }    
-
-
 
     
     private class ButtonListenerLeftRightClick implements MouseListener
@@ -84,8 +84,20 @@ public class MinseweperGame extends JPanel
                     buttonClicked.setText("");
                 } */
             }
-            
-            public int getNumber(int r, int c)
+        }
+        
+        // Unused methods from the MouseListener interface
+        public void mousePressed (MouseEvent e)  { }
+        public void mouseReleased (MouseEvent e) { }
+        public void mouseEntered (MouseEvent e)  { }
+        public void mouseExited (MouseEvent e)   { }
+    
+
+    
+    }
+    
+    
+    public int getNumber(int r, int c)
     {
         int count = 0; 
 
@@ -210,14 +222,6 @@ public class MinseweperGame extends JPanel
         }
         
         return count;
-    }
-        }
-        
-        // Unused methods from the MouseListener interface
-        public void mousePressed (MouseEvent e)  { }
-        public void mouseReleased (MouseEvent e) { }
-        public void mouseEntered (MouseEvent e)  { }
-        public void mouseExited (MouseEvent e)   { }
     }
 
 }
