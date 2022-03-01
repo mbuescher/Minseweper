@@ -123,7 +123,7 @@ public class MinseweperGame extends JPanel
         {
             for (int j = c-1; j<=c+1; j++)
             {
-                if(i >= 0 && i < NUMROWS - 1 && j >= 0 && j <= NUMCOLS-1 && i != r && j != c)
+                if(i >= 0 && i < NUMROWS && j >= 0 && j < NUMCOLS)
                 {
                     if (grid[i][j].getValue()==-1)
                     {
