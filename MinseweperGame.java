@@ -39,8 +39,6 @@ public class MinseweperGame extends JPanel
           for (int col = 0; col < NUMCOLS; col++)
           { 
             grid[row][col] = new MinsewepButton(row, col); 
-            grid[row][col].setValue(getNumber(row, col));
-            grid[row][col].setText("" + grid[row][col].getValue());
             grid[row][col].addMouseListener(new ButtonListenerLeftRightClick());
             add(grid[row][col]);  
           }
@@ -55,6 +53,14 @@ public class MinseweperGame extends JPanel
                 grid[row][col].setValue(-1);
                 grid[row][col].setText("" + grid[row][col].getValue());
                 bombsNotPlaced--;
+            }
+        }
+        for(int i = 0; i < NUMROWS; i++)
+        {
+            for(int j = 0; j < NUMCOLS; j++)
+            {
+                grid[row][col].setValue(getNumber(row, col));
+                grid[row][col].setText("" + grid[row][col].getValue());
             }
         }
         
