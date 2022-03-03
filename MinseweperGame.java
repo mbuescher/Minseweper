@@ -18,7 +18,7 @@ public class MinseweperGame extends JPanel
     // public constants for the game
     public final int NUMROWS = 10;
     public final int NUMCOLS = 10;
-    public final int NUMBOMBS = 10;
+    public final int NUMBOMBS = 25;
     
     // The grid!
     MinsewepButton grid[][] = new MinsewepButton[NUMROWS][NUMCOLS]; 
@@ -89,6 +89,10 @@ public class MinseweperGame extends JPanel
                 buttonClicked.setText("");
                 Font newFont = new Font("Arial", Font.BOLD, 25);
                 buttonClicked.setFont(newFont);
+                if(buttonClicked.getValue() == 0)
+                {
+                    openZero(row, col);
+                }
             }
             else if (e.getButton() == MouseEvent.BUTTON3)  // Right Button
             {
@@ -137,6 +141,26 @@ public class MinseweperGame extends JPanel
         }
 
         return count;
+    }
+    
+    public void openZero(int row, int col)
+    {
+        for(int r = row-1; r <= row+1; r++)
+        {
+            for(int c = col-1; c <= col+1; c++)
+            {
+                if(r >= 0 && c >= 0 && r < NUMROWS && c < NUMCOLS && grid[r][c].getStatus() == false)
+                {
+                    grid[r][c].setStatus(true);
+                    grid[r][c].setForeground(new Color(14, 110, 40));
+                    if(grid[r][c].getValue() == 0)
+                    {
+                        openZero(r, c);
+                        grid[r][c].setText("");
+                    }
+                }
+            }
+        }
     }
 
 }
