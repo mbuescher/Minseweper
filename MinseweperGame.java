@@ -43,12 +43,16 @@ public class MinseweperGame extends JPanel
             add(grid[row][col]);  
           }
         }
+        
+    }    
+    public void setBombs(int fRow, int fCol)
+    {
         int bombsNotPlaced = NUMBOMBS;
         while(bombsNotPlaced > 0)
         {
             int row = (int) (Math.random() * NUMROWS);
             int col = (int) (Math.random() * NUMCOLS);
-            if(grid[row][col].getValue() == 0)
+            if(Math.abs(row - fRow) > 1 && Math.abs(col - fCol) > 1 && grid[row][col].getValue() == 0)
             {
                 Font newFont = new Font("Arial", Font.BOLD, 35);
                 grid[row][col].setFont(newFont);
@@ -66,9 +70,7 @@ public class MinseweperGame extends JPanel
                 grid[i][j].setText("" + grid[i][j].getValue());
             }
         }
-        
-    }    
-
+    }
     
     private class ButtonListenerLeftRightClick implements MouseListener
     {
@@ -84,6 +86,10 @@ public class MinseweperGame extends JPanel
             
             if (e.getButton() == MouseEvent.BUTTON1 && buttonClicked.getIcon() == null)       // Left Button
             {
+                if(numOpen == 0)
+                {
+                    setBombs(row, col);
+                }
                 Color customColor = new Color(86, 166, 83);
                 buttonClicked.setBackground(customColor);
                 buttonClicked.setText("");
