@@ -89,6 +89,21 @@ public class MinseweperGame extends JPanel
         }
     }
     
+   /** Returns the number of open cells.
+     *  Used to communicate with the calling Minseweper class for display
+     *  @return  How many cells have been opened.
+     */
+    public int getNumOpen()   
+    { return numOpen;  }
+
+    /** Returns the number of unfound bombs, based on the number of flags placed.
+     *  Used to communicate with the calling Minseweper class for display
+     *  @return  How many bombs have not yet been flagged.
+     */
+    public int getNumUnfound()   
+    { return NUMBOMBS;  }
+    
+      
     // --------------------------------------------------------------------
     /* Actions to take when the mouse is clicked on a button.  */
     // --------------------------------------------------------------------
