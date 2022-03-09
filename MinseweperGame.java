@@ -2,7 +2,7 @@
  * Plays the game Minseweper (which is closely related to Minesweeper)
  * 
  * @author  The brilliant students of APCS-A at Hathaway Brown
- * @version 2022-03-09
+ * @version 2022-03
  */
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,19 +16,25 @@ import java.awt.Color;
 public class MinseweperGame extends JPanel
 {
     // public constants for the game
-    public final int NUMROWS = 10;
-    public final int NUMCOLS = 10;
-    public final int NUMBOMBS = 25;
-    
+    public static final int NUMROWS = 10;
+    public static final int NUMCOLS = 10;
+    public static final int NUMBOMBS = 25;
+        
     // The grid!
     private MinsewepButton grid[][] = new MinsewepButton[NUMROWS][NUMCOLS]; 
     
     // How many cells have been opened
     private int numOpen;
+    
+    // Bombs Remaining and where to find that info
+    private int bombsLeft;
+    DisplayPanel display;
 
-    public MinseweperGame()
+    public MinseweperGame(DisplayPanel d)
     {
         super();
+        bombsLeft = NUMBOMBS;
+        display = d;
         setLayout(new GridLayout(NUMROWS, NUMCOLS));
         initializeGame();
     }
@@ -71,7 +77,7 @@ public class MinseweperGame extends JPanel
             int col = (int) (Math.random() * NUMCOLS);
             if(Math.abs(row - fRow) > 1 && Math.abs(col - fCol) > 1 && grid[row][col].getValue() == 0)
             {
-                Font newFont = new Font("Arial", Font.BOLD, 15);
+                Font newFont = new Font("Arial", Font.BOLD, 35);
                 grid[row][col].setFont(newFont);
                 grid[row][col].setForeground(Color.RED);
                 grid[row][col].setValue(-1);
@@ -89,7 +95,7 @@ public class MinseweperGame extends JPanel
         }
     }
     
-   /** Returns the number of open cells.
+    /** Returns the number of open cells.
      *  Used to communicate with the calling Minseweper class for display
      *  @return  How many cells have been opened.
      */
@@ -103,7 +109,6 @@ public class MinseweperGame extends JPanel
     public int getNumUnfound()   
     { return NUMBOMBS;  }
     
-      
     // --------------------------------------------------------------------
     /* Actions to take when the mouse is clicked on a button.  */
     // --------------------------------------------------------------------
