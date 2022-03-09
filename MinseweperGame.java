@@ -153,10 +153,15 @@ public class MinseweperGame extends JPanel
                 {
                     Icon icon = new ImageIcon("flagjpeg.jpg");
                     buttonClicked.setIcon(icon); 
+                    bombsLeft--;
+                    display.updateBombs(bombsLeft);
                 }   
                 else
                 {
                     buttonClicked.setIcon(null);
+                    bombsLeft++;
+                    display.updateBombs(bombsLeft);
+                    
                 }
             }
         }
