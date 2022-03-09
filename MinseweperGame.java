@@ -145,6 +145,11 @@ public class MinseweperGame extends JPanel
                 {
                     openZero(row, col);
                 }
+                if (buttonClicked.getValue() == -1) 
+                {
+                    Icon icon = new ImageIcon("pixil-frame-0-2.png");
+                    buttonClicked.setIcon(icon); 
+                }
             }
             else if (e.getButton() == MouseEvent.BUTTON3)  // Right Button
             {
