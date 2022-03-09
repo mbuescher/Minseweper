@@ -2,7 +2,7 @@
  * Plays the game Minseweper (which is closely related to Minesweeper)
  * 
  * @author  The brilliant students of APCS-A at Hathaway Brown
- * @version 2022-03
+ * @version 2022-03-09
  */
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,7 +21,10 @@ public class MinseweperGame extends JPanel
     public final int NUMBOMBS = 25;
     
     // The grid!
-    MinsewepButton grid[][] = new MinsewepButton[NUMROWS][NUMCOLS]; 
+    private MinsewepButton grid[][] = new MinsewepButton[NUMROWS][NUMCOLS]; 
+    
+    // How many cells have been opened
+    private int numOpen;
 
     public MinseweperGame()
     {
@@ -31,7 +34,10 @@ public class MinseweperGame extends JPanel
     }
    
     
-        public void initializeGame()
+    /** Creates a 2-D array of MinsewepButtons and 
+     *  gives them all mouseListenters
+     */
+    public void initializeGame()
     {
         
         for(int row = 0; row < NUMROWS; row++)
@@ -44,7 +50,18 @@ public class MinseweperGame extends JPanel
           }
         }
         
+        numOpen = 0;
     }    
+    
+    /** Places NUMBOMBS on the board, subject to these conditions:
+     *  Only one bomb on a cell.
+     *  No bombs adjacent to the first cell that the user clicks, identified by
+     *  fRow and fCol
+     *  POSTCONDITION: NUMBOMBS have been placed
+     *  
+     *  @param  fRow  The row number of the user's initial click
+     *  @param  fCol  The column number of the user's initial click
+     */
     public void setBombs(int fRow, int fCol)
     {
         int bombsNotPlaced = NUMBOMBS;
@@ -72,6 +89,9 @@ public class MinseweperGame extends JPanel
         }
     }
     
+    // --------------------------------------------------------------------
+    /* Actions to take when the mouse is clicked on a button.  */
+    // --------------------------------------------------------------------
     private class ButtonListenerLeftRightClick implements MouseListener
     {
         // When the mouse is clicked on a cell:
@@ -86,15 +106,21 @@ public class MinseweperGame extends JPanel
             
             if (e.getButton() == MouseEvent.BUTTON1 && buttonClicked.getIcon() == null)       // Left Button
             {
+                // If this is the first cell opened, place the bombs (in other places)
                 if(numOpen == 0)
                 {
                     setBombs(row, col);
                 }
+                // Open the cell and change the button properties
                 Color customColor = new Color(86, 166, 83);
                 buttonClicked.setBackground(customColor);
+                grid[row][col].setStatus(MinsewepButton.OPEN);
                 buttonClicked.setText("");
-                Font newFont = new Font("Arial", Font.BOLD, 25);
+                Font newFont = new Font("Arial", Font.BOLD, 16);
                 buttonClicked.setFont(newFont);
+                
+                // Increment the count of open cells
+                numOpen++;
                 if(buttonClicked.getValue() == 0)
                 {
                     openZero(row, col);
@@ -102,6 +128,7 @@ public class MinseweperGame extends JPanel
             }
             else if (e.getButton() == MouseEvent.BUTTON3)  // Right Button
             {
+                // Toggle a flag image on the button
                 if(buttonClicked.getIcon() == null)
                 {
                     Icon icon = new ImageIcon("flagjpeg.jpg");
@@ -124,7 +151,11 @@ public class MinseweperGame extends JPanel
     
     }
     
-    
+    /** Counts the number of bombs adjacent to a given cell.
+     *  @param   r  The row number of the cell to check
+     *  @param   c  The column number of the cell to check
+     *  @return  -1 if the cell contains a bomb; otherwise, the number of adjacent bombs
+     */
     public int getNumber(int r, int c)
     {
         int count = 0; 
@@ -132,9 +163,9 @@ public class MinseweperGame extends JPanel
         {
             return -1;
         }
-        for(int i = r-1; i<=r+1; i++)
+        for(int i = r - 1; i <= r + 1; i++)
         {
-            for (int j = c-1; j<=c+1; j++)
+            for (int j = c - 1; j <= c + 1; j++)
             {
                 if(i >= 0 && i < NUMROWS && j >= 0 && j < NUMCOLS)
                 {
@@ -149,15 +180,23 @@ public class MinseweperGame extends JPanel
         return count;
     }
     
+    /** Opens all cells adjacent to a cell with zero adjacent bombs
+     *  (you might have to read that twice!
+     *  
+     *  PRECONDITION:  The cell at [row][col] has value 0 (no adjacent bombs)
+     *  POSTCONDITION: All cells connected to the zero cell are also opened.
+     */
     public void openZero(int row, int col)
     {
         for(int r = row-1; r <= row+1; r++)
         {
             for(int c = col-1; c <= col+1; c++)
             {
-                if(r >= 0 && c >= 0 && r < NUMROWS && c < NUMCOLS && grid[r][c].getStatus() == false)
+                if(r >= 0 && c >= 0 && r < NUMROWS && c < NUMCOLS && 
+                     grid[r][c].getStatus() == MinsewepButton.CLOSED)
                 {
-                    grid[r][c].setStatus(true);
+                    numOpen++;
+                    grid[r][c].setStatus(MinsewepButton.OPEN);
                     grid[r][c].setForeground(new Color(14, 110, 40));
                     if(grid[r][c].getValue() == 0)
                     {
