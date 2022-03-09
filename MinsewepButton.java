@@ -10,8 +10,8 @@ import javax.swing.*;
 
 public class MinsewepButton extends JButton
 {
-    public final boolean OPEN = true;
-    public final boolean CLOSED = false;
+    public static final boolean OPEN = true;
+    public static final boolean CLOSED = false;
     
     private int value;
     private boolean status;
