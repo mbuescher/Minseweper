@@ -75,7 +75,7 @@ public class MinseweperGame extends JPanel
         {
             int row = (int) (Math.random() * NUMROWS);
             int col = (int) (Math.random() * NUMCOLS);
-            if(Math.abs(row - fRow) > 1 && Math.abs(col - fCol) > 1 && grid[row][col].getValue() == 0)
+            if(Math.abs(row - fRow) > 1 || Math.abs(col - fCol) > 1 && grid[row][col].getValue() == 0)
             {
                 Font newFont = new Font("Arial", Font.BOLD, 35);
                 grid[row][col].setFont(newFont);
