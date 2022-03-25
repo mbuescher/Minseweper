@@ -18,7 +18,7 @@ public class MinseweperGame extends JPanel
     // public constants for the game
     public static final int NUMROWS = 10;
     public static final int NUMCOLS = 10;
-    public static final int NUMBOMBS = 25;
+    public static final int NUMBOMBS = 20;
         
     // The grid!
     private MinsewepButton grid[][] = new MinsewepButton[NUMROWS][NUMCOLS]; 
@@ -28,7 +28,11 @@ public class MinseweperGame extends JPanel
     
     // Bombs Remaining and where to find that info
     private int bombsLeft;
-    DisplayPanel display;
+    private DisplayPanel display;
+    
+    // The color of the background of an open cell
+    private Color openColor = new Color (200, 200, 200);  // light gray
+    private Font numberFont = new Font("Arial", Font.BOLD, 16);
 
     public MinseweperGame(DisplayPanel d)
     {
@@ -52,6 +56,7 @@ public class MinseweperGame extends JPanel
           { 
             grid[row][col] = new MinsewepButton(row, col); 
             grid[row][col].addMouseListener(new ButtonListenerLeftRightClick());
+            grid[row][col].setFont(numberFont);
             add(grid[row][col]);  
           }
         }
@@ -77,11 +82,11 @@ public class MinseweperGame extends JPanel
             int col = (int) (Math.random() * NUMCOLS);
             if(Math.abs(row - fRow) > 1 || Math.abs(col - fCol) > 1 && grid[row][col].getValue() == 0)
             {
-                Font newFont = new Font("Arial", Font.BOLD, 20);
-                grid[row][col].setFont(newFont);
+                //Font newFont = new Font("Arial", Font.BOLD, 20);
+                //grid[row][col].setFont(newFont);
                 grid[row][col].setForeground(Color.RED);
                 grid[row][col].setValue(-1);
-                grid[row][col].setText("" + grid[row][col].getValue());
+                //grid[row][col].setText("" + grid[row][col].getValue());
                 bombsNotPlaced--;
             }
         }
@@ -90,7 +95,9 @@ public class MinseweperGame extends JPanel
             for(int j = 0; j < NUMCOLS; j++)
             {
                 grid[i][j].setValue(getNumber(i, j));
-                grid[i][j].setText("" + grid[i][j].getValue());
+                // for testing: print value on all buttons
+                // grid[i][j].setText("" + grid[i][j].getValue());
+
             }
         }
     }
@@ -132,23 +139,21 @@ public class MinseweperGame extends JPanel
                     setBombs(row, col);
                 }
                 // Open the cell and change the button properties
-                Color customColor = new Color(86, 166, 83);
-                buttonClicked.setBackground(customColor);
-                grid[row][col].setStatus(MinsewepButton.OPEN);
-                buttonClicked.setText("");
-                Font newFont = new Font("Arial", Font.BOLD, 16);
-                buttonClicked.setFont(newFont);
-                
-                // Increment the count of open cells
-                numOpen++;
+                openCell(row, col);
                 if(buttonClicked.getValue() == 0)
                 {
                     openZero(row, col);
                 }
                 if (buttonClicked.getValue() == -1) 
                 {
-                    Icon icon = new ImageIcon("pixil-frame-0-2.png");
+                    Icon icon = new ImageIcon("pixil-frame-0-4.png");
                     buttonClicked.setIcon(icon); 
+                    JOptionPane.showMessageDialog(null, "BOOM!!!\nYou lose.");
+                    showRemainingBombs();
+                }
+                if (numOpen == (NUMROWS * NUMCOLS - NUMBOMBS))
+                {
+                    JOptionPane.showMessageDialog(null, "Congratulations!!!\nYou Win!!!");
                 }
             }
             else if (e.getButton() == MouseEvent.BUTTON3)  // Right Button
@@ -156,6 +161,7 @@ public class MinseweperGame extends JPanel
                 // Toggle a flag image on the button
                 if(buttonClicked.getIcon() == null)
                 {
+                    buttonClicked.setText("");
                     Icon icon = new ImageIcon("flagjpeg.jpg");
                     buttonClicked.setIcon(icon); 
                     bombsLeft--;
@@ -225,9 +231,8 @@ public class MinseweperGame extends JPanel
                 if(r >= 0 && c >= 0 && r < NUMROWS && c < NUMCOLS && 
                      grid[r][c].getStatus() == MinsewepButton.CLOSED)
                 {
-                    numOpen++;
-                    grid[r][c].setStatus(MinsewepButton.OPEN);
-                    grid[r][c].setForeground(new Color(14, 110, 40));
+                    openCell(r, c);
+                    
                     if(grid[r][c].getValue() == 0)
                     {
                         openZero(r, c);
@@ -237,5 +242,56 @@ public class MinseweperGame extends JPanel
             }
         }
     }
+    
+    
+    /** Opens the cell at [row][col] and updates various buttons.
+     *  @param row  The row of the cell to open
+     *  @param col  The column of the cell to open
+     */
+    public void openCell (int row, int col)
+    {
+        numOpen++;
+        grid[row][col].setStatus(MinsewepButton.OPEN);
+        grid[row][col].setForeground(getColor(grid[row][col].getValue()));
+        grid[row][col].setBackground(openColor);
+        
+        if (grid[row][col].getValue() >= 1)
+        {
+            grid[row][col].setText("" + grid[row][col].getValue());
+        }
+    }
+    
+    /** Returns a different color for the text when a button is opened.
+     *  @param n   The value of the cell
+     *  @return    A color appropriate to the value of the parameter
+     */
+    public Color getColor (int n)
+    {
+        switch(n)
+        {
+            case 1: return Color.BLUE;
+            case 2: return Color.GREEN;
+            case 3: return Color.RED;
+            default: return Color.BLACK;
+        }
+    }
+    
+    /** Shows the bombs remaining on the board that were not flagged
+     * 
+     */
+    public void showRemainingBombs()
+    {
+        Icon icon = new ImageIcon("pixil-frame-0-2.png");
 
+        for (int row = 0; row < NUMROWS; row++)
+        {
+            for (int col = 0; col < NUMCOLS; col++)
+            {
+                if (grid[row][col].getValue() == -1 && grid[row][col].getIcon() == null)
+                {                                       
+                    grid[row][col].setIcon(icon); 
+                }
+            }
+        }
+    }
 }
